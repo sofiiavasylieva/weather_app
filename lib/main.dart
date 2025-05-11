@@ -106,7 +106,14 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
       case 1:
         return ForecastScreen(forecast: _forecast!);
       case 2:
-        return CitySearchScreen(onCitySelected: _onCitySelected);
+        return CitySearchScreen(
+          onCitySelected: (city) {
+            _onCitySelected(city);
+            setState(() {
+              _selectedIndex = 0;
+            });
+          },
+        );
       default:
         return const SizedBox.shrink();
     }

@@ -17,80 +17,87 @@ class CurrentWeatherScreen extends StatelessWidget {
         ),
       ),
       child: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height - 120, // leave space for nav bar
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${weather.temperature.toStringAsFixed(1)}°C',
-                        style: const TextStyle(
-                          fontSize: 44,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${weather.temperature.toStringAsFixed(1)}°C',
+                            style: const TextStyle(
+                              fontSize: 44,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Text(
+                            weather.condition,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        weather.condition,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black54,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 51),
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Image.network(
+                          'https:${weather.icon}',
+                          width: 64,
+                          height: 64,
                         ),
                       ),
                     ],
                   ),
-                  Container(
-                    decoration: BoxDecoration(
+                  const SizedBox(height: 20),
+                  Flexible(
+                    child: Card(
                       color: Colors.white.withValues(alpha: 51),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildWeatherInfo('Feels Like', '${weather.feelsLike.toStringAsFixed(1)}°C'),
+                            _buildWeatherInfo('Humidity', '${weather.humidity.toStringAsFixed(0)}%'),
+                            _buildWeatherInfo('Wind', '${weather.windSpeed.toStringAsFixed(1)} km/h'),
+                            _buildWeatherInfo('Pressure', '${weather.pressure.toStringAsFixed(0)} mb'),
+                            _buildWeatherInfo('Visibility', '${weather.visibility.toStringAsFixed(0)} km'),
+                            _buildWeatherInfo('Precip.', '${weather.precipitation.toStringAsFixed(1)} mm'),
+                          ],
                         ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: Image.network(
-                      'https:${weather.icon}',
-                      width: 64,
-                      height: 64,
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: Card(
-                  color: Colors.white.withValues(alpha: 51),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildWeatherInfo('Feels Like', '${weather.feelsLike.toStringAsFixed(1)}°C'),
-                        _buildWeatherInfo('Humidity', '${weather.humidity.toStringAsFixed(0)}%'),
-                        _buildWeatherInfo('Wind', '${weather.windSpeed.toStringAsFixed(1)} km/h'),
-                        _buildWeatherInfo('Pressure', '${weather.pressure.toStringAsFixed(0)} mb'),
-                        _buildWeatherInfo('Visibility', '${weather.visibility.toStringAsFixed(0)} km'),
-                        _buildWeatherInfo('Precip.', '${weather.precipitation.toStringAsFixed(1)} mm'),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
