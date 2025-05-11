@@ -1,0 +1,19 @@
+platform :macos, '11.0'
+
+flutter_application_path = '../'
+#eval(File.read(File.join(flutter_application_path, 'Flutter', 'ephemeral', 'flutter_export_environment.sh')), binding)
+
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'FlutterMacOS', :path => File.join(flutter_application_path, 'Flutter', 'ephemeral')
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
+    end
+  end
+end
