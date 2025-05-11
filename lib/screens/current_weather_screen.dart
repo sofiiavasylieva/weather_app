@@ -72,7 +72,8 @@ class CurrentWeatherScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Flexible(
+                  SizedBox(
+                    height: 320,
                     child: Card(
                       color: Colors.white.withValues(alpha: 51),
                       elevation: 0,
