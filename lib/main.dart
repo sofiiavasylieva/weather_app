@@ -69,22 +69,41 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
 
   Future<void> _loadWeatherData({String? city}) async {
     final cityToUse = city ?? _selectedCity;
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _currentWeather = null; // Очищаємо старі дані
+      _forecast = null;
+    });
+
     try {
-      final results = await Future.wait([
-        _weatherService.getCurrentWeather(cityToUse),
-        _weatherService.getForecast(cityToUse),
-      ]);
+      // Завантажуємо поточну погоду
+      final weather = await _weatherService.getCurrentWeather(cityToUse);
       setState(() {
-        _currentWeather = results[0] as WeatherModel;
-        _forecast = results[1] as List<ForecastModel>;
-        _isLoading = false;
+        _currentWeather = weather;
       });
     } catch (e) {
-      setState(() => _isLoading = false);
+        print('Error loading current weather: $e');
+    }
+
+    try {
+      // Завантажуємо прогноз
+      final forecast = await _weatherService.getForecast(cityToUse);
+      setState(() {
+        _forecast = forecast;
+      });
+    } catch (e) {
+        print('Error loading forecast: $e');
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    // Якщо обидва запити провалилися, показуємо помилку
+    if (_currentWeather == null && _forecast == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load weather data: $e')),
+          const SnackBar(content: Text('Failed to load weather data')),
         );
       }
     }
