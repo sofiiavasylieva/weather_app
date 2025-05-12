@@ -10,7 +10,7 @@ class WeatherService {
   Future<WeatherModel> getCurrentWeather(String city) async {
     final response = await http.get(
       Uri.parse('$_baseUrl/current.json?key=$_apiKey&q=$city&aqi=no'),
-    );
+    ).timeout(const Duration(seconds: 5));
 
     if (response.statusCode == 200) {
       return WeatherModel.fromJson(json.decode(response.body));

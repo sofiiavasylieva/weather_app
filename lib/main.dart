@@ -59,36 +59,35 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
     _loadWeatherData();
   }
 
-  Future<void> _loadWeatherData() async {
+  void _onCitySelected(String city) {
+    _loadWeatherData(city: city);
     setState(() {
-      _isLoading = true;
+      _selectedCity = city;
+      _selectedIndex = 0;
     });
+  }
 
+  Future<void> _loadWeatherData({String? city}) async {
+    final cityToUse = city ?? _selectedCity;
+    setState(() => _isLoading = true);
     try {
-      final weather = await _weatherService.getCurrentWeather(_selectedCity);
-      final forecast = await _weatherService.getForecast(_selectedCity);
+      final results = await Future.wait([
+        _weatherService.getCurrentWeather(cityToUse),
+        _weatherService.getForecast(cityToUse),
+      ]);
       setState(() {
-        _currentWeather = weather;
-        _forecast = forecast;
+        _currentWeather = results[0] as WeatherModel;
+        _forecast = results[1] as List<ForecastModel>;
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to load weather data')),
+          SnackBar(content: Text('Failed to load weather data: $e')),
         );
       }
     }
-  }
-
-  void _onCitySelected(String city) {
-    setState(() {
-      _selectedCity = city;
-    });
-    _loadWeatherData();
   }
 
   Widget _buildBody() {
