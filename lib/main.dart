@@ -49,7 +49,7 @@ class _WeatherHomePageState extends State<WeatherHomePage> {
   final WeatherService _weatherService = WeatherService();
   WeatherModel? _currentWeather;
   List<ForecastModel>? _forecast;
-  String _selectedCity = 'Lviv';
+  String _selectedCity = 'London';
   bool _isLoading = false;
   int _selectedIndex = 0;
 

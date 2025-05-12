@@ -90,7 +90,7 @@ class CurrentWeatherScreen extends StatelessWidget {
                             _buildWeatherInfo('Wind', '${weather.windSpeed.toStringAsFixed(1)} km/h'),
                             _buildWeatherInfo('Pressure', '${weather.pressure.toStringAsFixed(0)} mb'),
                             _buildWeatherInfo('Visibility', '${weather.visibility.toStringAsFixed(0)} km'),
-                            _buildWeatherInfo('Precip.', '${weather.precipitation.toStringAsFixed(1)} mm'),
+                            _buildWeatherInfo('Precipitation', '${weather.precipitation.toStringAsFixed(1)} mm'),
                           ],
                         ),
                       ),
